@@ -66,13 +66,20 @@ const Triangle = function() {
 
     let triangleVert = [
         // X, Y, Z              RGB
-        0.0, 0.5, 0.0, 1.0, 0.0, 0.0, -0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
+        -0.5, 0.5, 0.0, 1.0, 1.0, 1.0,
+        0.5, 0.5, 0.0, 1.0, 0.0, 0.0,
+
+        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
+        0.5, 0.5, 0.0, 1.0, 0.0, 0.0,
+
+        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
         0.5, -0.5, 0.0, 0.0, 0.0, 1.0
     ]
     const triangleVertexBufferObject = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBufferObject);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVert), gl.STATIC_DRAW); // since everything in JS is 64 bit floating point we need to convert to 32 bits
 
+    console.log(triangleVert);
     const posAttrLocation = gl.getAttribLocation(program, 'vertPosition');
     const colorAttrLocation = gl.getAttribLocation(program, 'vertColor');
     gl.vertexAttribPointer(
@@ -112,6 +119,6 @@ const Triangle = function() {
 
 
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
 
 }
