@@ -66,38 +66,45 @@ const Triangle = function() {
 
     let triangleVert = [
         // X, Y, Z              RGB
-        -0.5, 0.5, 0.0, 1.0, 1.0, 1.0,
-        0.5, 0.5, 0.0, 1.0, 0.0, 0.0,
+        -0.7, 0.0, 0.0, 1.0, 1.0, 1.0, // Centralny wierzchołek
 
-        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
-        0.5, 0.5, 0.0, 1.0, 0.0, 0.0,
+        -0.5, 0.5, 0.0, 1.0, 0.0, 0.0, // Punkt 1
 
-        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
-        0.5, -0.5, 0.0, 0.0, 0.0, 1.0
-    ]
+        0.5, 0.5, 0.0, 1.0, 0.0, 0.0, // Punkt 2
+        0.7, 0.0, 0.0, 0.3, 1.0, 0.4, // Punkt 3
+
+        0.5, -0.5, 0.0, 0.0, 0.0, 1.0, // Punkt 4
+
+
+        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0 // Punkt 5
+
+    ];
+
+
+
     const triangleVertexBufferObject = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBufferObject);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVert), gl.STATIC_DRAW); // since everything in JS is 64 bit floating point we need to convert to 32 bits
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVert), gl.STATIC_DRAW);
 
-    console.log(triangleVert);
     const posAttrLocation = gl.getAttribLocation(program, 'vertPosition');
     const colorAttrLocation = gl.getAttribLocation(program, 'vertColor');
+
     gl.vertexAttribPointer(
         posAttrLocation,
-        3, // number of elements per attribute
+        3,
         gl.FLOAT,
         gl.FALSE,
         6 * Float32Array.BYTES_PER_ELEMENT,
-        0,
+        0
     );
 
     gl.vertexAttribPointer(
-        colorAttrLocation, // attribute location
-        3, // number of elements per attribute
-        gl.FLOAT, // type of elements
-        gl.FALSE, // if data is normalized
-        6 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
-        3 * Float32Array.BYTES_PER_ELEMENT, // offset from the beginnning  of a single vertex to this attribute
+        colorAttrLocation,
+        3,
+        gl.FLOAT,
+        gl.FALSE,
+        6 * Float32Array.BYTES_PER_ELEMENT,
+        3 * Float32Array.BYTES_PER_ELEMENT
     );
 
     gl.enableVertexAttribArray(posAttrLocation);
@@ -117,8 +124,6 @@ const Triangle = function() {
     gl.uniformMatrix4fv(matViewUniformLocation, gl.FALSE, viewMatrix);
     gl.uniformMatrix4fv(matProjUniformLocation, gl.FALSE, projMatrix);
 
-
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 6);
 }
