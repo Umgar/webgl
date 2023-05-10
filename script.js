@@ -29,6 +29,22 @@ const fragmentShaderTxt = `
 `
 const mat4 = glMatrix.mat4;
 
+let triangleVert = [
+    // X, Y, Z              RGB
+    -0.7, 0.0, 0.0, 1.0, 1.0, 1.0, // Centralny wierzchołek
+
+    -0.5, 0.5, 0.0, 1.0, 0.0, 0.0, // Punkt 1
+
+    0.5, 0.5, 0.0, 1.0, 0.0, 0.0, // Punkt 2
+    0.7, 0.0, 0.0, .3, 1.0, 0.4, // Punkt 3
+
+    0.5, -0.5, 0.0, 0.0, 0.0, 1.0, // Punkt 4
+
+
+    -0.5, -0.5, 0.0, 0.0, 1.0, 0.0 // Punkt 5
+
+];
+
 const Triangle = function() {
     const canvas = document.getElementById("main-canvas");
     // console.log(canvas);
@@ -64,21 +80,7 @@ const Triangle = function() {
 
     gl.validateProgram(program);
 
-    let triangleVert = [
-        // X, Y, Z              RGB
-        -0.7, 0.0, 0.0, 1.0, 1.0, 1.0, // Centralny wierzchołek
 
-        -0.5, 0.5, 0.0, 1.0, 0.0, 0.0, // Punkt 1
-
-        0.5, 0.5, 0.0, 1.0, 0.0, 0.0, // Punkt 2
-        0.7, 0.0, 0.0, 0.3, 1.0, 0.4, // Punkt 3
-
-        0.5, -0.5, 0.0, 0.0, 0.0, 1.0, // Punkt 4
-
-
-        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0 // Punkt 5
-
-    ];
 
 
 
@@ -125,5 +127,25 @@ const Triangle = function() {
     gl.uniformMatrix4fv(matProjUniformLocation, gl.FALSE, projMatrix);
 
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, 6);
+    const size = 6;
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, size);
+
+    const colorBtn = document.getElementById("colorInput");
+    document.getElementById("send").addEventListener("click", function() {
+        let hex = colorBtn.value.substring(1);
+        let red = parseInt(hex.substring(0, 2), 16) / 255;
+        let blue = parseInt(hex.substring(2, 4), 16) / 255;
+        let green = parseInt(hex.substring(4, 6), 16) / 255;
+        let i = 3;
+        while (i < triangleVert.length) {
+            triangleVert[i] = red;
+            triangleVert[i + 1] = blue;
+            triangleVert[i + 2] = green;
+            i += 6;
+        }
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVert), gl.STATIC_DRAW);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLE_FAN, 0, size);
+        console.log(triangleVert);
+    })
 }
